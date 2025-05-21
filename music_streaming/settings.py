@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'streaming',
     'django_extensions',
     'rest_framework.authtoken',
-    'phantom_auth'
+    'phantom_auth',
 ]
 
 MIDDLEWARE = [
@@ -146,3 +146,5 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
 }
+
+SESSION_COOKIE_SECURE = False

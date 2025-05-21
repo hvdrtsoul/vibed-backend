@@ -10,16 +10,20 @@ class PhantomUserManager(BaseUserManager):
         if not public_key:
             raise ValueError("User must have a public_key")
         user = self.model(public_key=public_key)
-        user.set_unusable_password()
+        if password:
+            user.set_password(password)
+        else:
+            user.set_unusable_password()
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, public_key, password=None):
+    def create_superuser(self, public_key, password):
         user = self.create_user(public_key, password)
         user.is_staff = True
         user.is_superuser = True
         user.save(using=self._db)
         return user
+
 
 class PhantomUser(AbstractBaseUser, PermissionsMixin):
     public_key = models.CharField(max_length=128, unique=True)
@@ -27,6 +31,7 @@ class PhantomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
+    token_balance = models.IntegerField(default=0)
     objects = PhantomUserManager()
 
     USERNAME_FIELD = 'public_key'
